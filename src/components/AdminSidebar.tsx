@@ -31,9 +31,9 @@ export function AdminSidebar() {
             <Link
               key={item.label}
               to={item.to}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all ${
                 active
-                  ? "bg-primary/10 font-medium text-primary"
+                  ? "bg-primary/15 font-semibold text-primary shadow-sm"
                   : "text-muted-foreground hover:bg-secondary hover:text-foreground"
               }`}
             >
@@ -56,7 +56,7 @@ export function MobileAdminNav({ onNavigate }: { onNavigate?: () => void }) {
   }
 
   return (
-    <nav className="flex flex-col gap-1 mt-2">
+    <nav className="flex flex-col gap-2 mt-4">
       {items.map((item) => {
         const active = isActive(item.to, item.exact);
         return (
@@ -64,9 +64,9 @@ export function MobileAdminNav({ onNavigate }: { onNavigate?: () => void }) {
             key={item.label}
             to={item.to}
             onClick={onNavigate}
-            className={`flex items-center gap-3 rounded-lg px-3 py-3 text-base transition-colors ${
+            className={`flex items-center gap-3 rounded-xl px-4 py-3.5 text-base transition-all ${
               active
-                ? "bg-primary/10 font-medium text-primary"
+                ? "bg-primary/15 font-semibold text-primary shadow-sm"
                 : "text-muted-foreground hover:bg-secondary hover:text-foreground"
             }`}
           >

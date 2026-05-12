@@ -27,7 +27,7 @@ function AdminShell() {
     <div className="flex min-h-screen bg-background">
       <AdminSidebar />
       <div className="flex flex-1 flex-col overflow-auto">
-        <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-card/90 px-4 py-3 backdrop-blur">
+        <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-card/90 px-4 py-3 shadow-sm backdrop-blur">
           <div className="flex items-center gap-3">
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger className="md:hidden">

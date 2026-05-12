@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/providers")({
   head: () => ({ meta: [{ title: "Providers — MoveOut Admin" }] }),
@@ -56,7 +57,7 @@ function AdminProviders() {
     }
   }
 
-  if (loading) return <p className="mt-8 text-sm text-muted-foreground">Loading providers…</p>;
+  if (loading) return <div className="flex min-h-[50vh] items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
   if (error) return <div className="mt-8 rounded-xl border border-destructive/40 bg-destructive/10 p-5 text-sm text-destructive">{error}</div>;
 
   return (
@@ -75,7 +76,7 @@ function AdminProviders() {
         ) : (
           <ul className="mt-3 space-y-3">
             {pending.map((p) => (
-              <li key={p.id} className="rounded-xl border border-border bg-card p-4">
+              <li key={p.id} className="rounded-xl border border-border bg-card p-4 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-medium">{p.business_name}</div>
@@ -103,7 +104,7 @@ function AdminProviders() {
         ) : (
           <ul className="mt-3 space-y-2">
             {allProviders.map((p) => (
-              <li key={p.id} className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3 text-sm">
+              <li key={p.id} className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3 text-sm shadow-sm">
                 <div>
                   <div className="font-medium">{p.business_name}</div>
                   <div className="text-xs text-muted-foreground">{p._full_name} · ★ {Number(p.rating).toFixed(1)} · {p.jobs_completed} jobs</div>
