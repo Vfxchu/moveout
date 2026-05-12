@@ -30,6 +30,11 @@ function AdminDashboard() {
       }
     };
     load();
+    const ch = supabase.channel("admin-dashboard")
+      .on("postgres_changes", { event: "*", schema: "public", table: "providers" }, load)
+      .on("postgres_changes", { event: "*", schema: "public", table: "requests" }, load)
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
   }, []);
 
   if (loading) return <p className="mt-8 text-sm text-muted-foreground">Loading dashboard…</p>;

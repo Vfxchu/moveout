@@ -28,6 +28,8 @@ function ProviderBids() {
     load();
     const ch = supabase.channel("provider-bids")
       .on("postgres_changes", { event: "*", schema: "public", table: "bids", filter: `provider_id=eq.${user.id}` }, load)
+      .on("postgres_changes", { event: "*", schema: "public", table: "request_services" }, load)
+      .on("postgres_changes", { event: "*", schema: "public", table: "requests" }, load)
       .subscribe();
     return () => { supabase.removeChannel(ch); };
   }, [user]);
