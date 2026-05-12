@@ -20,6 +20,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProviderWalletRouteImport } from './routes/provider.wallet'
 import { Route as ProviderProfileRouteImport } from './routes/provider.profile'
 import { Route as ProviderOnboardingRouteImport } from './routes/provider.onboarding'
+import { Route as ProviderMessagesRouteImport } from './routes/provider.messages'
 import { Route as ProviderJobsRouteImport } from './routes/provider.jobs'
 import { Route as ProviderBidsRouteImport } from './routes/provider.bids'
 import { Route as CustomerProfileRouteImport } from './routes/customer.profile'
@@ -86,6 +87,11 @@ const ProviderProfileRoute = ProviderProfileRouteImport.update({
 const ProviderOnboardingRoute = ProviderOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
+  getParentRoute: () => ProviderRoute,
+} as any)
+const ProviderMessagesRoute = ProviderMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
   getParentRoute: () => ProviderRoute,
 } as any)
 const ProviderJobsRoute = ProviderJobsRouteImport.update({
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/customer/profile': typeof CustomerProfileRoute
   '/provider/bids': typeof ProviderBidsRoute
   '/provider/jobs': typeof ProviderJobsRoute
+  '/provider/messages': typeof ProviderMessagesRoute
   '/provider/onboarding': typeof ProviderOnboardingRoute
   '/provider/profile': typeof ProviderProfileRoute
   '/provider/wallet': typeof ProviderWalletRoute
@@ -188,6 +195,7 @@ export interface FileRoutesByTo {
   '/customer/profile': typeof CustomerProfileRoute
   '/provider/bids': typeof ProviderBidsRoute
   '/provider/jobs': typeof ProviderJobsRoute
+  '/provider/messages': typeof ProviderMessagesRoute
   '/provider/onboarding': typeof ProviderOnboardingRoute
   '/provider/profile': typeof ProviderProfileRoute
   '/provider/wallet': typeof ProviderWalletRoute
@@ -214,6 +222,7 @@ export interface FileRoutesById {
   '/customer/profile': typeof CustomerProfileRoute
   '/provider/bids': typeof ProviderBidsRoute
   '/provider/jobs': typeof ProviderJobsRoute
+  '/provider/messages': typeof ProviderMessagesRoute
   '/provider/onboarding': typeof ProviderOnboardingRoute
   '/provider/profile': typeof ProviderProfileRoute
   '/provider/wallet': typeof ProviderWalletRoute
@@ -241,6 +250,7 @@ export interface FileRouteTypes {
     | '/customer/profile'
     | '/provider/bids'
     | '/provider/jobs'
+    | '/provider/messages'
     | '/provider/onboarding'
     | '/provider/profile'
     | '/provider/wallet'
@@ -263,6 +273,7 @@ export interface FileRouteTypes {
     | '/customer/profile'
     | '/provider/bids'
     | '/provider/jobs'
+    | '/provider/messages'
     | '/provider/onboarding'
     | '/provider/profile'
     | '/provider/wallet'
@@ -288,6 +299,7 @@ export interface FileRouteTypes {
     | '/customer/profile'
     | '/provider/bids'
     | '/provider/jobs'
+    | '/provider/messages'
     | '/provider/onboarding'
     | '/provider/profile'
     | '/provider/wallet'
@@ -382,6 +394,13 @@ declare module '@tanstack/react-router' {
       path: '/onboarding'
       fullPath: '/provider/onboarding'
       preLoaderRoute: typeof ProviderOnboardingRouteImport
+      parentRoute: typeof ProviderRoute
+    }
+    '/provider/messages': {
+      id: '/provider/messages'
+      path: '/messages'
+      fullPath: '/provider/messages'
+      preLoaderRoute: typeof ProviderMessagesRouteImport
       parentRoute: typeof ProviderRoute
     }
     '/provider/jobs': {
@@ -516,6 +535,7 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
 interface ProviderRouteChildren {
   ProviderBidsRoute: typeof ProviderBidsRoute
   ProviderJobsRoute: typeof ProviderJobsRoute
+  ProviderMessagesRoute: typeof ProviderMessagesRoute
   ProviderOnboardingRoute: typeof ProviderOnboardingRoute
   ProviderProfileRoute: typeof ProviderProfileRoute
   ProviderWalletRoute: typeof ProviderWalletRoute
@@ -525,6 +545,7 @@ interface ProviderRouteChildren {
 const ProviderRouteChildren: ProviderRouteChildren = {
   ProviderBidsRoute: ProviderBidsRoute,
   ProviderJobsRoute: ProviderJobsRoute,
+  ProviderMessagesRoute: ProviderMessagesRoute,
   ProviderOnboardingRoute: ProviderOnboardingRoute,
   ProviderProfileRoute: ProviderProfileRoute,
   ProviderWalletRoute: ProviderWalletRoute,

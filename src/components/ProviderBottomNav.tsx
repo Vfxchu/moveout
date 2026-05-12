@@ -1,11 +1,11 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutList, Send, Briefcase, Wallet, User } from "lucide-react";
+import { LayoutList, Send, Briefcase, MessageSquare, User } from "lucide-react";
 
 const tabs = [
   { label: "Requests", icon: LayoutList, to: "/provider" as const, exact: true },
-  { label: "My Bids", icon: Send, to: "/provider/bids" as const, exact: false },
+  { label: "Bids", icon: Send, to: "/provider/bids" as const, exact: false },
   { label: "Jobs", icon: Briefcase, to: "/provider/jobs" as const, exact: false },
-  { label: "Wallet", icon: Wallet, to: "/provider/wallet" as const, exact: false },
+  { label: "Messages", icon: MessageSquare, to: "/provider/messages" as const, exact: false },
   { label: "Profile", icon: User, to: "/provider/profile" as const, exact: false },
 ];
 

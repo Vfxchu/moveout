@@ -3,8 +3,8 @@ import { Home, PlusCircle, ClipboardList, MessageSquare, User } from "lucide-rea
 
 const tabs = [
   { label: "Home", icon: Home, to: "/customer" as const, exact: true },
-  { label: "New Request", icon: PlusCircle, to: "/customer/new" as const, exact: false },
-  { label: "Orders", icon: ClipboardList, to: "/customer/orders" as const, exact: false },
+  { label: "Requests", icon: ClipboardList, to: "/customer/orders" as const, exact: false },
+  { label: "New", icon: PlusCircle, to: "/customer/new" as const, exact: false },
   { label: "Messages", icon: MessageSquare, to: "/customer/messages" as const, exact: false },
   { label: "Profile", icon: User, to: "/customer/profile" as const, exact: false },
 ];
