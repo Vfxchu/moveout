@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/provider/")({
   head: () => ({ meta: [{ title: "Provider — MoveOut" }] }),
@@ -74,7 +75,7 @@ function ProviderDashboard() {
     }
   }
 
-  if (loading) return <p className="mt-8 text-sm text-muted-foreground">Loading…</p>;
+  if (loading) return <div className="flex py-12 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
   if (!provider) return null;
 
   return (
@@ -114,7 +115,7 @@ function ProviderDashboard() {
 
 function Stat({ label, value }: { label: string; value: any }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-3 text-center">
+    <div className="rounded-xl border border-border bg-card p-3 text-center shadow-sm">
       <div className="text-xs text-muted-foreground">{label}</div>
       <div className="mt-1 text-lg font-bold">{value}</div>
     </div>
@@ -145,7 +146,7 @@ function BidRow({ rs, providerId, existingBid }: { rs: any; providerId: string; 
   }
 
   return (
-    <li className="rounded-xl border border-border bg-card p-4">
+    <li className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="flex items-center justify-between">
         <div>
           <div className="font-medium">{rs.services.name}</div>

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { Clock, CheckCircle2 } from "lucide-react";
+import { Clock, CheckCircle2, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/provider/bids")({
   head: () => ({ meta: [{ title: "My Bids — MoveOut" }] }),
@@ -40,7 +40,7 @@ function ProviderBids() {
       <p className="mt-1 text-sm text-muted-foreground">All bids you have submitted.</p>
 
       {loading ? (
-        <p className="mt-8 text-sm text-muted-foreground">Loading…</p>
+        <div className="flex py-12 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
       ) : bids.length === 0 ? (
         <div className="mt-10 rounded-2xl border border-dashed border-border p-8 text-center">
           <p className="text-sm text-muted-foreground">No bids yet.</p>
@@ -49,7 +49,7 @@ function ProviderBids() {
       ) : (
         <ul className="mt-6 space-y-3">
           {bids.map((b) => (
-            <li key={b.id} className="rounded-xl border border-border bg-card p-4">
+            <li key={b.id} className="rounded-xl border border-border bg-card p-4 shadow-sm">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="font-medium">{b.request_services?.services?.name}</div>

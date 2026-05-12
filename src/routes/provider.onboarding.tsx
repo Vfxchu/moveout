@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Clock } from "lucide-react";
+import { Clock, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/provider/onboarding")({
   head: () => ({ meta: [{ title: "Provider Onboarding — MoveOut" }] }),
@@ -67,7 +67,7 @@ function ProviderOnboarding() {
     }
   }
 
-  if (loading) return <p className="mt-8 text-sm text-muted-foreground">Loading…</p>;
+  if (loading) return <div className="flex min-h-[50vh] items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
 
   // No provider record — show registration form
   if (!provider) {
@@ -75,11 +75,11 @@ function ProviderOnboarding() {
       <>
         <h1 className="text-2xl font-bold">Provider onboarding</h1>
         <p className="mt-1 text-sm text-muted-foreground">Tell us about your business. An admin will verify.</p>
-        <form onSubmit={createProvider} className="mt-5 space-y-4">
+        <form onSubmit={createProvider} className="mt-5 space-y-6">
           <div><Label>Business name</Label><Input value={businessName} onChange={(e) => setBusinessName(e.target.value)} required /></div>
           <div><Label>Phone</Label><Input value={phone} onChange={(e) => setPhone(e.target.value)} /></div>
           <div><Label>Service area</Label><Input value={serviceArea} onChange={(e) => setServiceArea(e.target.value)} placeholder="e.g. Mumbai metro" /></div>
-          <Button type="submit" disabled={busy} className="w-full">{busy ? "Submitting…" : "Submit for verification"}</Button>
+          <Button type="submit" disabled={busy} className="w-full shadow-sm">{busy ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting…</> : "Submit for verification"}</Button>
         </form>
       </>
     );
@@ -97,7 +97,7 @@ function ProviderOnboarding() {
         <Label className="mb-2 block">Pick the services you offer</Label>
         <div className="grid grid-cols-2 gap-2">
           {services.map((s) => (
-            <button key={s.id} onClick={() => toggleService(s.id)} className={`rounded-lg border p-3 text-left text-sm ${mySvcIds.has(s.id) ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}>
+            <button key={s.id} onClick={() => toggleService(s.id)} className={`flex min-h-[80px] flex-col justify-center rounded-xl border p-3 text-left text-sm shadow-sm transition-all ${mySvcIds.has(s.id) ? "border-primary bg-primary text-primary-foreground shadow-primary/20" : "border-border bg-card hover:border-primary/40"}`}>
               {s.name}
             </button>
           ))}

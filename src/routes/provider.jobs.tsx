@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/provider/jobs")({
   head: () => ({ meta: [{ title: "Active Jobs — MoveOut" }] }),
@@ -41,7 +41,7 @@ function ProviderJobs() {
       <p className="mt-1 text-sm text-muted-foreground">Jobs you have been awarded.</p>
 
       {loading ? (
-        <p className="mt-8 text-sm text-muted-foreground">Loading…</p>
+        <div className="flex py-12 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
       ) : jobs.length === 0 ? (
         <div className="mt-10 rounded-2xl border border-dashed border-border p-8 text-center">
           <p className="text-sm text-muted-foreground">No active jobs.</p>
@@ -82,7 +82,7 @@ function JobCard({ bid }: { bid: any }) {
   }
   const steps = ["on_the_way", "started", "completed"];
   return (
-    <li className="rounded-xl border border-border bg-card p-4">
+    <li className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="flex items-center justify-between">
         <div>
           <div className="font-medium">{bid.request_services.services.name}</div>

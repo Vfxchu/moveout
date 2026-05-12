@@ -4,7 +4,7 @@ import { RequireAuth } from "@/components/AppShell";
 import { useAuth } from "@/lib/auth";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, LogOut } from "lucide-react";
+import { Sparkles, LogOut, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/provider")({
   component: ProviderLayout,
@@ -49,18 +49,13 @@ function ProviderShell() {
     }
   }, [checked, isOnboarding, isApproved, navigate]);
 
-  if (!checked) {
-    return <div className="flex min-h-screen items-center justify-center text-muted-foreground">Loading…</div>;
-  }
-
-  // Prevent flash while redirecting in either direction
-  if ((!isOnboarding && !isApproved) || (isOnboarding && isApproved)) {
-    return <div className="flex min-h-screen items-center justify-center text-muted-foreground">Loading…</div>;
+  if (!checked || (!isOnboarding && !isApproved) || (isOnboarding && isApproved)) {
+    return <div className="flex min-h-[50vh] items-center justify-center text-muted-foreground"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
   }
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-card/90 px-4 py-3 backdrop-blur">
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-card/90 px-4 py-3 shadow-sm backdrop-blur">
         <Link to="/provider" className="flex items-center gap-2 font-semibold text-primary">
           <Sparkles className="h-5 w-5" /> MoveOut Pro
         </Link>
