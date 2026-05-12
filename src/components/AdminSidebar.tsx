@@ -46,3 +46,35 @@ export function AdminSidebar() {
     </aside>
   );
 }
+
+export function MobileAdminNav({ onNavigate }: { onNavigate?: () => void }) {
+  const { pathname } = useLocation();
+
+  function isActive(to: string, exact: boolean) {
+    if (exact) return pathname === to || pathname === to + "/";
+    return pathname.startsWith(to);
+  }
+
+  return (
+    <nav className="flex flex-col gap-1 mt-2">
+      {items.map((item) => {
+        const active = isActive(item.to, item.exact);
+        return (
+          <Link
+            key={item.label}
+            to={item.to}
+            onClick={onNavigate}
+            className={`flex items-center gap-3 rounded-lg px-3 py-3 text-base transition-colors ${
+              active
+                ? "bg-primary/10 font-medium text-primary"
+                : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+            }`}
+          >
+            <item.icon className="h-5 w-5" />
+            {item.label}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
