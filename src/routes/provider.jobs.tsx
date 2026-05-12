@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2, MessageSquare } from "lucide-react";
+import { ChatWindow } from "@/components/ChatWindow";
 
 export const Route = createFileRoute("/provider/jobs")({
   head: () => ({ meta: [{ title: "Active Jobs — MoveOut" }] }),
@@ -20,7 +21,7 @@ function ProviderJobs() {
     const load = async () => {
       const { data } = await supabase
         .from("bids")
-        .select("id, request_service_id, amount, status, eta_hours, notes, request_services(job_status, services(name), requests(location, customer_id))")
+        .select("id, request_service_id, amount, status, eta_hours, notes, request_services(request_id, job_status, services(name), requests(location, customer_id))")
         .eq("provider_id", user.id)
         .eq("status", "accepted")
         .order("created_at", { ascending: false });
@@ -50,7 +51,7 @@ function ProviderJobs() {
       ) : (
         <ul className="mt-6 space-y-3">
           {jobs.map((bid) => (
-            <JobCard key={bid.id} bid={bid} />
+            <JobCard key={bid.id} bid={bid} currentUserId={user!.id} />
           ))}
         </ul>
       )}
@@ -58,8 +59,9 @@ function ProviderJobs() {
   );
 }
 
-function JobCard({ bid }: { bid: any }) {
+function JobCard({ bid, currentUserId }: { bid: any; currentUserId: string }) {
   const [status, setStatus] = useState<string | null>(bid.request_services?.job_status || null);
+  const [showChat, setShowChat] = useState(false);
   async function update(s: string) {
     await supabase.from("request_services").update({ job_status: s as any }).eq("id", bid.request_service_id);
     if (s === "completed") {
@@ -88,7 +90,12 @@ function JobCard({ bid }: { bid: any }) {
           <div className="font-medium">{bid.request_services.services.name}</div>
           <div className="text-xs text-muted-foreground">{bid.request_services.requests.location}</div>
         </div>
-        <div className="font-bold">₹{bid.amount}</div>
+        <div className="text-right">
+          <div className="font-bold">₹{bid.amount}</div>
+          <button onClick={() => setShowChat(!showChat)} className="mt-1 flex items-center gap-1 text-xs font-medium text-primary hover:underline">
+            <MessageSquare className="h-3 w-3" /> {showChat ? "Hide chat" : "Message customer"}
+          </button>
+        </div>
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
         {steps.map((s) => {
@@ -105,6 +112,15 @@ function JobCard({ bid }: { bid: any }) {
           );
         })}
       </div>
+      {showChat && (
+        <div className="mt-4 h-[350px]">
+          <ChatWindow
+            requestId={bid.request_services.request_id}
+            currentUserId={currentUserId}
+            recipientId={bid.request_services.requests.customer_id}
+          />
+        </div>
+      )}
     </li>
   );
 }
