@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/customer/new")({
   head: () => ({ meta: [{ title: "New request — MoveOut" }] }),
@@ -73,7 +74,7 @@ function NewRequest() {
       <h1 className="text-2xl font-bold">What do you need?</h1>
       <p className="mt-1 text-sm text-muted-foreground">Pick all the services you need. Providers will bid in real time.</p>
 
-      <form onSubmit={submit} className="mt-6 space-y-5">
+      <form onSubmit={submit} className="mt-6 space-y-6">
         <div>
           <Label className="mb-2 block">Services</Label>
           <div className="grid grid-cols-2 gap-2">
@@ -82,9 +83,9 @@ function NewRequest() {
                 key={s.id}
                 type="button"
                 onClick={() => toggle(s.id)}
-                className={`min-h-[64px] rounded-xl border p-3 text-left text-sm transition ${
+                className={`flex min-h-[80px] flex-col justify-center rounded-xl border p-3 text-left text-sm shadow-sm transition-all ${
                   selected.has(s.id)
-                    ? "border-primary bg-primary text-primary-foreground"
+                    ? "border-primary bg-primary text-primary-foreground shadow-primary/20"
                     : "border-border bg-card hover:border-primary/40"
                 }`}
               >
@@ -122,7 +123,7 @@ function NewRequest() {
         </div>
 
         <Button type="submit" disabled={busy} className="w-full">
-          {busy ? "Posting…" : "Post request"}
+          {busy ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Posting…</> : "Post request"}
         </Button>
       </form>
     </>

@@ -22,7 +22,7 @@ function CustomerShell() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-card/90 px-4 py-3 backdrop-blur">
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-card/90 px-4 py-3 shadow-sm backdrop-blur">
         <Link to="/customer" className="flex items-center gap-2 font-semibold text-primary">
           <Sparkles className="h-5 w-5" /> MoveOut
         </Link>

@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Star, Trophy, Zap, Wallet, ArrowLeft } from "lucide-react";
+import { Star, Trophy, Zap, Wallet, ArrowLeft, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/customer/r/$id")({
   head: () => ({ meta: [{ title: "Request details — MoveOut" }] }),
@@ -86,14 +86,14 @@ function RequestDetail() {
     }
   }
 
-  if (loading) return <div className="flex min-h-screen items-center justify-center text-muted-foreground">Loading…</div>;
+  if (loading) return <div className="flex min-h-[50vh] items-center justify-center text-muted-foreground"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
   if (!request) return <div className="p-8">Not found.</div>;
 
   const isAwarded = request.status !== "open";
 
   return (
     <>
-      <Link to="/customer" className="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <Link to="/customer" className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-secondary/60 px-3 py-1.5 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary">
         <ArrowLeft className="h-4 w-4" /> Back
       </Link>
       <h1 className="text-xl font-bold">{request.location}</h1>
@@ -116,7 +116,7 @@ function RequestDetail() {
           {services.map((s) => {
             const sBids = bids.filter((b) => b.request_service_id === s.id);
             return (
-              <div key={s.id} className="rounded-xl border border-border bg-card p-4">
+              <div key={s.id} className="rounded-xl border border-border bg-card p-4 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div className="font-medium">{s.services.name}</div>
                   {s.job_status && <span className="rounded-full bg-secondary px-2 py-0.5 text-xs text-secondary-foreground">{s.job_status.replace(/_/g, " ")}</span>}
@@ -126,7 +126,7 @@ function RequestDetail() {
                 ) : (
                   <ul className="mt-3 space-y-2">
                     {sBids.map((b) => (
-                      <li key={b.id} className={`flex items-center justify-between rounded-lg border p-3 ${b.status === "accepted" ? "border-success bg-success/5" : "border-border"}`}>
+                      <li key={b.id} className={`flex items-center justify-between rounded-lg border p-3 shadow-sm ${b.status === "accepted" ? "border-success bg-success/5" : "border-border"}`}>
                         <div>
                           <div className="font-medium">{b.providers.business_name}</div>
                           <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
@@ -159,7 +159,7 @@ function ComboCard({ icon: Icon, label, combo, services, onAccept, accent }: {
   const avg = combo.reduce((s, b) => s + Number(b.providers.rating), 0) / combo.length;
   const eta = Math.max(...combo.map((b) => b.eta_hours ?? 0));
   return (
-    <div className="rounded-xl border border-border bg-card p-4">
+    <div className="rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:border-primary/40 hover:shadow-md">
       <div className="flex items-center gap-2">
         <span className={`flex h-8 w-8 items-center justify-center rounded-full ${accent} text-white`}>
           <Icon className="h-4 w-4" />

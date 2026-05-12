@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { Clock, CheckCircle2 } from "lucide-react";
+import { Clock, CheckCircle2, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/customer/orders")({
   head: () => ({ meta: [{ title: "Orders — MoveOut" }] }),
@@ -39,7 +39,7 @@ function CustomerOrders() {
       <p className="mt-1 text-sm text-muted-foreground">Requests that have been awarded or are in progress.</p>
 
       {loading ? (
-        <p className="mt-8 text-sm text-muted-foreground">Loading…</p>
+        <div className="flex py-12 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
       ) : requests.length === 0 ? (
         <div className="mt-10 rounded-2xl border border-dashed border-border p-8 text-center">
           <p className="text-sm text-muted-foreground">No orders yet.</p>
@@ -52,7 +52,7 @@ function CustomerOrders() {
               <Link
                 to="/customer/r/$id"
                 params={{ id: r.id }}
-                className="block rounded-xl border border-border bg-card p-4 hover:border-primary"
+                className="block rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:border-primary hover:shadow-md"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
