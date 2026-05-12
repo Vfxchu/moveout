@@ -5,7 +5,7 @@ trigger: always_on
 Never print, expose, delete, overwrite, or commit .env files.
 Use .env.example for documentation only.
 
-Before doing any coding work in this project, always read PROJECT_CONTEXT.md.
+Before doing any coding work in this project, always read projectcontext.md and the move out plan.md promt 
 
 This project is an existing MoveOut MVP. Do not rebuild from scratch. Work phase by phase only.
 
