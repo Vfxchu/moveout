@@ -21,31 +21,25 @@ function CustomerMessages() {
     const load = async () => {
       const { data } = await supabase
         .from("requests")
-        .select("id, location, request_services(awarded_bid_id, bids(id, provider_id, providers(business_name)))")
+        .select("id, location, status, request_services(bids(id, provider_id, providers(business_name)))")
         .eq("customer_id", user.id)
-        .in("status", ["awarded", "in_progress", "completed"]);
+        .in("status", ["open", "awarded", "in_progress", "completed"]);
 
       const convos: any[] = [];
       const seen = new Set();
 
       for (const req of data || []) {
         for (const rs of req.request_services || []) {
-          if (rs.awarded_bid_id && rs.bids) {
-            const awardedBid = Array.isArray(rs.bids)
-              ? rs.bids.find((b: any) => b.id === rs.awarded_bid_id)
-              : rs.bids;
-
-            if (awardedBid) {
-              const key = `${req.id}-${awardedBid.provider_id}`;
-              if (!seen.has(key)) {
-                seen.add(key);
-                convos.push({
-                  requestId: req.id,
-                  location: req.location,
-                  providerId: awardedBid.provider_id,
-                  providerName: awardedBid.providers?.business_name || "Provider",
-                });
-              }
+          for (const b of Array.isArray(rs.bids) ? rs.bids : (rs.bids ? [rs.bids] : [])) {
+            const key = `${req.id}-${b.provider_id}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              convos.push({
+                requestId: req.id,
+                location: req.location,
+                providerId: b.provider_id,
+                providerName: b.providers?.business_name || "Provider",
+              });
             }
           }
         }

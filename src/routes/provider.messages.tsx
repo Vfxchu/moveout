@@ -23,7 +23,7 @@ function ProviderMessages() {
         .from("bids")
         .select("id, request_services(request_id, services(name), requests(location, customer_id))")
         .eq("provider_id", user.id)
-        .eq("status", "accepted");
+        .in("status", ["pending", "accepted"]);
 
       const convos: any[] = [];
       const seen = new Set();

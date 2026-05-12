@@ -42,7 +42,7 @@ function CustomerHome() {
           .eq("customer_id", user.id)
           .order("created_at", { ascending: false })
           .limit(3)
-          .then(({data}) => setRequests(data ?? []));
+          .then(({data}: any) => setRequests(data ?? []));
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };

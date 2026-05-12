@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Star, Trophy, Zap, Wallet, ArrowLeft, Loader2 } from "lucide-react";
+import { Star, Trophy, Zap, Wallet, ArrowLeft, Loader2, MessageSquare } from "lucide-react";
+import { ChatWindow } from "@/components/ChatWindow";
 
 export const Route = createFileRoute("/customer/r/$id")({
   head: () => ({ meta: [{ title: "Request details — MoveOut" }] }),
@@ -21,6 +22,7 @@ function RequestDetail() {
   const [services, setServices] = useState<RS[]>([]);
   const [bids, setBids] = useState<Bid[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeChatId, setActiveChatId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -126,19 +128,38 @@ function RequestDetail() {
                 ) : (
                   <ul className="mt-3 space-y-2">
                     {sBids.map((b) => (
-                      <li key={b.id} className={`flex items-center justify-between rounded-lg border p-3 shadow-sm ${b.status === "accepted" ? "border-success bg-success/5" : "border-border"}`}>
-                        <div>
-                          <div className="font-medium">{b.providers.business_name}</div>
-                          <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
-                            <Star className="h-3 w-3 fill-warning text-warning" /> {Number(b.providers.rating).toFixed(1)} ({b.providers.review_count})
-                            {b.eta_hours && <span>· ~{b.eta_hours}h</span>}
+                      <li key={b.id} className={`flex flex-col rounded-lg border shadow-sm ${b.status === "accepted" ? "border-success bg-success/5" : "border-border"}`}>
+                        <div className="flex items-center justify-between p-3">
+                          <div>
+                            <div className="font-medium">{b.providers.business_name}</div>
+                            <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
+                              <Star className="h-3 w-3 fill-warning text-warning" /> {Number(b.providers.rating).toFixed(1)} ({b.providers.review_count})
+                              {b.eta_hours && <span>· ~{b.eta_hours}h</span>}
+                            </div>
+                            {b.notes && <p className="mt-1 text-xs text-muted-foreground">{b.notes}</p>}
                           </div>
-                          {b.notes && <p className="mt-1 text-xs text-muted-foreground">{b.notes}</p>}
+                          <div className="text-right flex flex-col items-end gap-2">
+                            <div>
+                              <div className="text-lg font-bold">₹{b.amount}</div>
+                              <div className="text-xs text-muted-foreground capitalize">{b.status}</div>
+                            </div>
+                            <button
+                              onClick={() => setActiveChatId(activeChatId === b.provider_id ? null : b.provider_id)}
+                              className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                            >
+                              <MessageSquare className="h-3 w-3" /> {activeChatId === b.provider_id ? "Hide chat" : "Message"}
+                            </button>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <div className="text-lg font-bold">₹{b.amount}</div>
-                          <div className="text-xs text-muted-foreground capitalize">{b.status}</div>
-                        </div>
+                        {activeChatId === b.provider_id && (
+                          <div className="border-t border-border bg-card p-3 h-[300px]">
+                            <ChatWindow
+                              requestId={id}
+                              currentUserId={user!.id}
+                              recipientId={b.provider_id}
+                            />
+                          </div>
+                        )}
                       </li>
                     ))}
                   </ul>
