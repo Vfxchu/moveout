@@ -20,7 +20,7 @@ function ProviderJobs() {
     const load = async () => {
       const { data } = await supabase
         .from("bids")
-        .select("id, request_service_id, amount, status, eta_hours, notes, request_services(services(name), requests(location, customer_id))")
+        .select("id, request_service_id, amount, status, eta_hours, notes, request_services(job_status, services(name), requests(location, customer_id))")
         .eq("provider_id", user.id)
         .eq("status", "accepted")
         .order("created_at", { ascending: false });
@@ -59,7 +59,7 @@ function ProviderJobs() {
 }
 
 function JobCard({ bid }: { bid: any }) {
-  const [, setStatus] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(bid.request_services?.job_status || null);
   async function update(s: string) {
     await supabase.from("request_services").update({ job_status: s as any }).eq("id", bid.request_service_id);
     if (s === "completed") {
@@ -91,12 +91,19 @@ function JobCard({ bid }: { bid: any }) {
         <div className="font-bold">₹{bid.amount}</div>
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
-        {steps.map((s) => (
-          <button key={s} onClick={() => update(s)} className="rounded-md border border-border bg-secondary px-3 py-1.5 text-xs capitalize hover:border-primary">
-            {s === "completed" && <CheckCircle2 className="mr-1 inline h-3 w-3" />}
-            {s.replace(/_/g, " ")}
-          </button>
-        ))}
+        {steps.map((s) => {
+          const isActive = status === s;
+          return (
+            <button 
+              key={s} 
+              onClick={() => update(s)} 
+              className={`rounded-md border px-3 py-1.5 text-xs capitalize transition-colors ${isActive ? "border-primary bg-primary text-primary-foreground" : "border-border bg-secondary hover:border-primary"}`}
+            >
+              {s === "completed" && <CheckCircle2 className="mr-1 inline h-3 w-3" />}
+              {s.replace(/_/g, " ")}
+            </button>
+          );
+        })}
       </div>
     </li>
   );

@@ -37,11 +37,15 @@ function ProviderShell() {
   const isOnboarding = pathname.startsWith("/provider/onboarding");
   const isApproved = providerStatus === "approved";
 
-  // Onboarding guard — redirect non-approved providers, but never redirect if already on onboarding
+  // Onboarding guard
   useEffect(() => {
     if (!checked) return;
     if (!isOnboarding && !isApproved) {
+      // Non-approved provider trying to access dashboard -> redirect to onboarding
       navigate({ to: "/provider/onboarding" });
+    } else if (isOnboarding && isApproved) {
+      // Approved provider trying to access onboarding -> redirect to dashboard
+      navigate({ to: "/provider" });
     }
   }, [checked, isOnboarding, isApproved, navigate]);
 
@@ -49,8 +53,8 @@ function ProviderShell() {
     return <div className="flex min-h-screen items-center justify-center text-muted-foreground">Loading…</div>;
   }
 
-  // Prevent flash while redirecting to onboarding
-  if (!isOnboarding && !isApproved) {
+  // Prevent flash while redirecting in either direction
+  if ((!isOnboarding && !isApproved) || (isOnboarding && isApproved)) {
     return <div className="flex min-h-screen items-center justify-center text-muted-foreground">Loading…</div>;
   }
 
